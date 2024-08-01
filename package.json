@@ -1,0 +1,34 @@
+{
+  "name": "@mineskin/auth",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn tsc"
+  },
+  "repository": "https://github.com/MineSkin/mineskin-auth.git",
+  "author": {
+    "name": "Haylee Schäfer",
+    "email": "haylee@inventivetalent.org",
+    "url": "https://inventivetalent.org"
+  },
+  "devDependencies": {
+    "@mineskin/types": "./types",
+    "@types/node": "^20.14.9",
+    "@types/qs": "^6",
+    "nodemon": "^3.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  },
+  "packageManager": "yarn@4.3.1",
+  "dependencies": {
+    "@xboxreplay/xboxlive-auth": "^4.0.0",
+    "axios": "^1.7.2",
+    "pino": "^9.3.2",
+    "qs": "^6.12.3"
+  }
+}
