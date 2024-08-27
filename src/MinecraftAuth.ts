@@ -1,13 +1,10 @@
-import pino from "pino";
 import { RequestHandlers } from "./types/RequestHandler";
 import { BasicMojangProfile } from "@mineskin/types";
+import winston from "winston";
 
 export class MinecraftAuth {
 
-
-    logger: pino.Logger = pino({
-        msgPrefix: '[AUTH]'
-    });
+    static logger: winston.Logger = winston.createLogger();
 
     constructor(
         private readonly requestHandlers: RequestHandlers<'minecraftServices'|'minecraftServicesProfile'>
@@ -15,7 +12,7 @@ export class MinecraftAuth {
     }
 
     async checkGameOwnership(accessToken: string): Promise<boolean> {
-        this.logger.debug("checkGameOwnership")
+        MinecraftAuth.logger.debug("checkGameOwnership")
         const entitlementsResponse = await this.requestHandlers.minecraftServices({
             method: "GET",
             url: "https://api.minecraftservices.com/entitlements/mcstore",

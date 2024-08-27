@@ -11,9 +11,9 @@ import {
     XSTSResponse
 } from "./types/MicrosoftAuthInfo";
 import { RequestHandlers } from "./types/RequestHandler";
-import pino from "pino";
 import { MSAError } from "./MSAError";
 import { epochSeconds, toEpochSeconds } from "./util";
+import winston from "winston";
 
 const MC_XSTSRelyingParty = 'rp://api.minecraftservices.com/'
 const XBOX_XSTSRelyingParty = 'http://xboxlive.com'
@@ -21,12 +21,10 @@ const XBOX_XSTSRelyingParty = 'http://xboxlive.com'
 // manage app on portal.azure.com
 export class MicrosoftAuth {
 
-    logger: pino.Logger = pino({
-        msgPrefix: '[AUTH]'
-    });
+    static logger: winston.Logger = winston.createLogger();
 
     constructor(
-        private readonly requestHandlers: RequestHandlers<'generic'|'liveLogin'|'minecraftServices'>,
+        private readonly requestHandlers: RequestHandlers<'generic' | 'liveLogin' | 'minecraftServices'>,
         private readonly redirectUri: string = process.env.MSA_REDIRECT_URI,
     ) {
     }
@@ -48,7 +46,7 @@ export class MicrosoftAuth {
     }
 
     public async loginWithXboxCode(code: string): Promise<XboxInfo> {
-        this.logger.debug("loginWithXboxCode")
+        MicrosoftAuth.logger.debug("loginWithXboxCode")
         const form = {
             "client_id": process.env.MSA_CLIENT_ID,
             "client_secret": process.env.MSA_CLIENT_SECRET,
@@ -62,7 +60,7 @@ export class MicrosoftAuth {
     async exchangeRpsTicketForIdentities(rpsTicket: string): Promise<MicrosoftIdentities & {
         token: XBLExchangeTokensResponse
     }> {
-        this.logger.debug("exchangeRpsTicketForIdentities")
+        MicrosoftAuth.logger.debug("exchangeRpsTicketForIdentities")
         if (!rpsTicket.startsWith("d=")) {
             // username+password login doesn't seem to need this prefix, code auth does
             rpsTicket = `d=${ rpsTicket }`;
@@ -84,7 +82,7 @@ export class MicrosoftAuth {
     }
 
     async getIdentityForRelyingParty(userTokenResponse: XBLExchangeTokensResponse, relyingParty: string): Promise<XSTSResponse> {
-        this.logger.debug("getIdentityForRelyingParty")
+        MicrosoftAuth.logger.debug("getIdentityForRelyingParty")
         // https://xsts.auth.xboxlive.com/xsts/authorize
         const body = {
             RelyingParty: relyingParty,
@@ -113,7 +111,7 @@ export class MicrosoftAuth {
     }
 
     private async authenticateXboxLiveWithFormData(form: any): Promise<XboxInfo> {
-        this.logger.debug("authenticateXboxLiveWithFormData")
+        MicrosoftAuth.logger.debug("authenticateXboxLiveWithFormData")
         let refreshResponse: AxiosResponse;
         try {
             refreshResponse = await this.requestHandlers.liveLogin({
@@ -184,7 +182,7 @@ export class MicrosoftAuth {
     }
 
     private async loginToMinecraftWithXbox(userHash: string, xstsToken: string): Promise<XboxLoginResponse> {
-        this.logger.debug("loginToMinecraftWithXbox")
+        MicrosoftAuth.logger.debug("loginToMinecraftWithXbox")
         const body = {
             identityToken: `XBL3.0 x=${ userHash };${ xstsToken }`
         };
@@ -209,10 +207,8 @@ export class MicrosoftAuth {
     }
 
 
-
-
     async refreshXboxAccessToken(xboxRefreshToken: string): Promise<XboxInfo> {
-        this.logger.debug("refreshXboxAccessToken");
+        MicrosoftAuth.logger.debug("refreshXboxAccessToken");
         const form = {
             "client_id": process.env.MSA_CLIENT_ID,
             "client_secret": process.env.MSA_CLIENT_SECRET,
