@@ -70,9 +70,9 @@ __metadata:
   linkType: soft
 
 "@mineskin/types@file:./types::locator=%40mineskin%2Fauth%40workspace%3A.":
-  version: 1.0.0
-  resolution: "@mineskin/types@file:./types#./types::hash=834e57&locator=%40mineskin%2Fauth%40workspace%3A."
-  checksum: 10c0/f88e9df194ab90c8f3d94a296b074d06f5aa2e2bf9f5a131d458307ddbb45a6b705219847fd7bdbcb0ad3f3a8af33d2c672d2d6616701997b71f8a613e5a11eb
+  version: 1.0.1
+  resolution: "@mineskin/types@file:./types#./types::hash=69f6af&locator=%40mineskin%2Fauth%40workspace%3A."
+  checksum: 10c0/aef6fe9d9ff4e5fa980f3d03525691b9422f021abb423f519491e7e138c7bcf3c948ee7e22b4617140d64b3d004f4108a311339e38259132c01d68e2c1d4d89b
   languageName: node
   linkType: hard
 

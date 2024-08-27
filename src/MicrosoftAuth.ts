@@ -1,9 +1,8 @@
 import * as process from "node:process";
-import { base64encode, epochSeconds, notNull, toEpochSeconds } from "./util";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import * as qs from "qs";
 import * as XboxLiveAuth from "@xboxreplay/xboxlive-auth"
-import { AuthenticateResponse, ExchangeRpsTicketResponse } from "@xboxreplay/xboxlive-auth"
+import { XBLExchangeTokensResponse } from "@xboxreplay/xboxlive-auth"
 import {
     MicrosoftAuthInfo,
     MicrosoftIdentities, MicrosoftOauthResult,
@@ -11,8 +10,10 @@ import {
     XboxLoginResponse,
     XSTSResponse
 } from "./types/MicrosoftAuthInfo";
-import { MSAError } from "./error/MSAError";
 import { RequestHandlers } from "./types/RequestHandler";
+import pino from "pino";
+import { MSAError } from "./MSAError";
+import { epochSeconds, toEpochSeconds } from "./util";
 
 const MC_XSTSRelyingParty = 'rp://api.minecraftservices.com/'
 const XBOX_XSTSRelyingParty = 'http://xboxlive.com'
@@ -20,14 +21,14 @@ const XBOX_XSTSRelyingParty = 'http://xboxlive.com'
 // manage app on portal.azure.com
 export class MicrosoftAuth {
 
+    logger: pino.Logger = pino({
+        msgPrefix: '[AUTH]'
+    });
+
     constructor(
-        private readonly requestHandlers: RequestHandlers,
+        private readonly requestHandlers: RequestHandlers<'generic'|'liveLogin'|'minecraftServices'>,
         private readonly redirectUri: string = process.env.MSA_REDIRECT_URI,
     ) {
-    }
-
-    private debug(msg: string) {
-        console.debug(`[MicrosoftAuth] ${ msg }`)
     }
 
     public async newOAuthRedirect(
@@ -47,7 +48,7 @@ export class MicrosoftAuth {
     }
 
     public async loginWithXboxCode(code: string): Promise<XboxInfo> {
-        console.log("loginWithXboxCode")
+        this.logger.debug("loginWithXboxCode")
         const form = {
             "client_id": process.env.MSA_CLIENT_ID,
             "client_secret": process.env.MSA_CLIENT_SECRET,
@@ -55,21 +56,21 @@ export class MicrosoftAuth {
             "grant_type": "authorization_code",
             "redirect_uri": this.redirectUri
         }
-        return await this.authenticateXboxWithFormData(form);
+        return await this.authenticateXboxLiveWithFormData(form);
     }
 
     async exchangeRpsTicketForIdentities(rpsTicket: string): Promise<MicrosoftIdentities & {
-        token: ExchangeRpsTicketResponse
+        token: XBLExchangeTokensResponse
     }> {
-        console.debug("exchangeRpsTicketForIdentities")
+        this.logger.debug("exchangeRpsTicketForIdentities")
         if (!rpsTicket.startsWith("d=")) {
             // username+password login doesn't seem to need this prefix, code auth does
             rpsTicket = `d=${ rpsTicket }`;
         }
         // https://user.auth.xboxlive.com/user/authenticate
-        let userTokenResponse: ExchangeRpsTicketResponse;
+        let userTokenResponse: XBLExchangeTokensResponse;
         try {
-            userTokenResponse = await XboxLiveAuth.exchangeRpsTicketForUserToken(rpsTicket);
+            userTokenResponse = await XboxLiveAuth.xbl.exchangeRpsTicketForUserToken(rpsTicket);
         } catch (e) {
             throw new MSAError('exchangeRpsTicketForIdentities', e);
         }
@@ -82,8 +83,8 @@ export class MicrosoftAuth {
         };
     }
 
-    async getIdentityForRelyingParty(userTokenResponse: ExchangeRpsTicketResponse, relyingParty: string): Promise<XSTSResponse> {
-        console.debug("getIdentityForRelyingParty")
+    async getIdentityForRelyingParty(userTokenResponse: XBLExchangeTokensResponse, relyingParty: string): Promise<XSTSResponse> {
+        this.logger.debug("getIdentityForRelyingParty")
         // https://xsts.auth.xboxlive.com/xsts/authorize
         const body = {
             RelyingParty: relyingParty,
@@ -111,13 +112,13 @@ export class MicrosoftAuth {
         return authResponse.data as XSTSResponse
     }
 
-    private async authenticateXboxWithFormData(form: any): Promise<XboxInfo> {
-        console.log("authenticateXboxWithFormData")
+    private async authenticateXboxLiveWithFormData(form: any): Promise<XboxInfo> {
+        this.logger.debug("authenticateXboxLiveWithFormData")
         let refreshResponse: AxiosResponse;
         try {
             refreshResponse = await this.requestHandlers.liveLogin({
                 method: "POST",
-                url: "/oauth20_token.srf",
+                url: "https://login.live.com/oauth20_token.srf",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                     "Accept": "application/json"
@@ -128,16 +129,16 @@ export class MicrosoftAuth {
             throw new MSAError('authenticateXboxWithFormData', e);
         }
         const refreshBody = refreshResponse.data;
-        console.log("refreshBody");
-        console.log(JSON.stringify(refreshBody))
+        // console.log("refreshBody");
+        // console.log(JSON.stringify(refreshBody))
 
         // Microsoft/Xbox accessToken
         const xboxAccessToken = refreshBody["access_token"];
         const xboxRefreshToken = refreshBody["refresh_token"];
 
         const identityResponses = await this.exchangeRpsTicketForIdentities(xboxAccessToken);
-        console.log("identities");
-        console.log(identityResponses)
+        // console.log("identities");
+        // console.log(identityResponses)
         const mcIdentity = identityResponses.mc;
         const xboxIdentity = identityResponses.xbox;
 
@@ -183,7 +184,7 @@ export class MicrosoftAuth {
     }
 
     private async loginToMinecraftWithXbox(userHash: string, xstsToken: string): Promise<XboxLoginResponse> {
-        console.debug("loginToMinecraftWithXbox")
+        this.logger.debug("loginToMinecraftWithXbox")
         const body = {
             identityToken: `XBL3.0 x=${ userHash };${ xstsToken }`
         };
@@ -191,7 +192,7 @@ export class MicrosoftAuth {
         try {
             xboxLoginResponse = await this.requestHandlers.minecraftServices({
                 method: "POST",
-                url: "/authentication/login_with_xbox",
+                url: "https://api.minecraftservices.com/authentication/login_with_xbox",
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json"
@@ -202,28 +203,16 @@ export class MicrosoftAuth {
             throw new MSAError('loginToMinecraftWithXbox', e);
         }
         const xboxLoginBody = xboxLoginResponse.data;
-        console.log("xboxLogin")
-        console.log(JSON.stringify(xboxLoginBody));
+        // console.log("xboxLogin")
+        // console.log(JSON.stringify(xboxLoginBody));
         return xboxLoginBody as XboxLoginResponse;
     }
 
-    async checkGameOwnership(accessToken: string): Promise<boolean> {
-        console.debug("checkGameOwnership")
-        const entitlementsResponse = await this.requestHandlers.minecraftServices({
-            method: "GET",
-            url: "/entitlements/mcstore",
-            headers: {
-                Authorization: `Bearer ${ accessToken }`
-            }
-        });
-        const entitlementsBody = entitlementsResponse.data;
-        // console.log("entitlements");
-        // console.log(entitlementsBody)
-        return entitlementsBody.hasOwnProperty("items") && entitlementsBody["items"].length > 0;
-    }
+
 
 
     async refreshXboxAccessToken(xboxRefreshToken: string): Promise<XboxInfo> {
+        this.logger.debug("refreshXboxAccessToken");
         const form = {
             "client_id": process.env.MSA_CLIENT_ID,
             "client_secret": process.env.MSA_CLIENT_SECRET,
@@ -231,7 +220,7 @@ export class MicrosoftAuth {
             "grant_type": "refresh_token",
             "redirect_uri": this.redirectUri
         }
-        return await this.authenticateXboxWithFormData(form);
+        return await this.authenticateXboxLiveWithFormData(form);
     }
 
 }
