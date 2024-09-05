@@ -17,7 +17,7 @@
     "url": "https://inventivetalent.org"
   },
   "devDependencies": {
-    "@mineskin/types": "./types",
+    "@mineskin/types": "git+ssh://git@github.com/MineSkin/mineskin-types.git",
     "@types/node": "^20.14.9",
     "@types/qs": "^6",
     "nodemon": "^3.1.2",

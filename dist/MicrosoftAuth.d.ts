@@ -1,5 +1,5 @@
 import { XBLExchangeTokensResponse } from "@xboxreplay/xboxlive-auth";
-import { MicrosoftIdentities, XboxInfo, XSTSResponse } from "./types/MicrosoftAuthInfo";
+import { MicrosoftIdentities, XboxInfo, XSTSResponse } from "@mineskin/types";
 import { RequestHandlers } from "./types/RequestHandler";
 import winston from "winston";
 export declare class MicrosoftAuth {

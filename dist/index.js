@@ -18,6 +18,5 @@ __exportStar(require("./MicrosoftAuth"), exports);
 __exportStar(require("./MinecraftAuth"), exports);
 __exportStar(require("./MSAError"), exports);
 __exportStar(require("./util"), exports);
-__exportStar(require("./types/MicrosoftAuthInfo"), exports);
 __exportStar(require("./types/RequestHandler"), exports);
 //# sourceMappingURL=index.js.map

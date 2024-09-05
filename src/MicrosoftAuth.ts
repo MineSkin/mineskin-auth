@@ -9,7 +9,7 @@ import {
     XboxInfo,
     XboxLoginResponse,
     XSTSResponse
-} from "./types/MicrosoftAuthInfo";
+} from "@mineskin/types";
 import { RequestHandlers } from "./types/RequestHandler";
 import { MSAError } from "./MSAError";
 import { epochSeconds, toEpochSeconds } from "./util";
