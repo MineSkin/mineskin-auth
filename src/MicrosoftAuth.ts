@@ -75,18 +75,22 @@ export class MicrosoftAuth {
                 // username+password login doesn't seem to need this prefix, code auth does
                 rpsTicket = `d=${ rpsTicket }`;
             }
-            // https://user.auth.xboxlive.com/user/authenticate
-            let userTokenResponse: XBLExchangeTokensResponse;
-            try {
-                userTokenResponse = await XboxLiveAuth.xbl.exchangeRpsTicketForUserToken(rpsTicket);
-            } catch (e) {
-                Sentry.captureException(e, {
-                    tags: {
-                        stage: 'exchangeRpsTicketForIdentities'
-                    }
-                });
-                throw new MSAError('exchangeRpsTicketForIdentities', e);
-            }
+            let userTokenResponse: XBLExchangeTokensResponse = await Sentry.startSpan({
+                op: 'xbl',
+                name: 'exchangeRpsTicketForUserToken'
+            }, async () => {
+                // https://user.auth.xboxlive.com/user/authenticate
+                try {
+                    return await XboxLiveAuth.xbl.exchangeRpsTicketForUserToken(rpsTicket);
+                } catch (e) {
+                    Sentry.captureException(e, {
+                        tags: {
+                            stage: 'exchangeRpsTicketForIdentities'
+                        }
+                    });
+                    throw new MSAError('exchangeRpsTicketForIdentities', e);
+                }
+            });
             // console.log("exchangeRpsTicket")
             // console.log(JSON.stringify(userTokenResponse))
             return {
