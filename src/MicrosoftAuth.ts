@@ -14,6 +14,7 @@ import { RequestHandlers } from "./types/RequestHandler";
 import { MSAError } from "./MSAError";
 import { epochSeconds, toEpochSeconds } from "./util";
 import winston from "winston";
+import * as Sentry from "@sentry/node";
 
 const MC_XSTSRelyingParty = 'rp://api.minecraftservices.com/'
 const XBOX_XSTSRelyingParty = 'http://xboxlive.com'
@@ -70,6 +71,11 @@ export class MicrosoftAuth {
         try {
             userTokenResponse = await XboxLiveAuth.xbl.exchangeRpsTicketForUserToken(rpsTicket);
         } catch (e) {
+            Sentry.captureException(e,{
+                tags: {
+                    stage: 'exchangeRpsTicketForIdentities'
+                }
+            });
             throw new MSAError('exchangeRpsTicketForIdentities', e);
         }
         // console.log("exchangeRpsTicket")
@@ -105,6 +111,11 @@ export class MicrosoftAuth {
                 data: body
             });
         } catch (e) {
+            Sentry.captureException(e,{
+                tags: {
+                    stage: 'getIdentityForRelyingParty'
+                }
+            });
             throw new MSAError('getIdentityForRelyingParty', e);
         }
         return authResponse.data as XSTSResponse
@@ -124,6 +135,11 @@ export class MicrosoftAuth {
                 data: qs.stringify(form)
             });
         } catch (e) {
+            Sentry.captureException(e,{
+                tags: {
+                    stage: 'authenticateXboxLiveWithFormData'
+                }
+            });
             throw new MSAError('authenticateXboxWithFormData', e);
         }
         const refreshBody = refreshResponse.data;
@@ -198,6 +214,11 @@ export class MicrosoftAuth {
                 data: body
             });
         } catch (e) {
+            Sentry.captureException(e,{
+                tags: {
+                    stage: 'loginToMinecraftWithXbox'
+                }
+            });
             throw new MSAError('loginToMinecraftWithXbox', e);
         }
         const xboxLoginBody = xboxLoginResponse.data;

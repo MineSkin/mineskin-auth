@@ -33,6 +33,7 @@ const XboxLiveAuth = __importStar(require("@xboxreplay/xboxlive-auth"));
 const MSAError_1 = require("./MSAError");
 const util_1 = require("./util");
 const winston_1 = __importDefault(require("winston"));
+const Sentry = __importStar(require("@sentry/node"));
 const MC_XSTSRelyingParty = 'rp://api.minecraftservices.com/';
 const XBOX_XSTSRelyingParty = 'http://xboxlive.com';
 // manage app on portal.azure.com
@@ -75,6 +76,11 @@ class MicrosoftAuth {
             userTokenResponse = await XboxLiveAuth.xbl.exchangeRpsTicketForUserToken(rpsTicket);
         }
         catch (e) {
+            Sentry.captureException(e, {
+                tags: {
+                    stage: 'exchangeRpsTicketForIdentities'
+                }
+            });
             throw new MSAError_1.MSAError('exchangeRpsTicketForIdentities', e);
         }
         // console.log("exchangeRpsTicket")
@@ -110,6 +116,11 @@ class MicrosoftAuth {
             });
         }
         catch (e) {
+            Sentry.captureException(e, {
+                tags: {
+                    stage: 'getIdentityForRelyingParty'
+                }
+            });
             throw new MSAError_1.MSAError('getIdentityForRelyingParty', e);
         }
         return authResponse.data;
@@ -129,6 +140,11 @@ class MicrosoftAuth {
             });
         }
         catch (e) {
+            Sentry.captureException(e, {
+                tags: {
+                    stage: 'authenticateXboxLiveWithFormData'
+                }
+            });
             throw new MSAError_1.MSAError('authenticateXboxWithFormData', e);
         }
         const refreshBody = refreshResponse.data;
@@ -198,6 +214,11 @@ class MicrosoftAuth {
             });
         }
         catch (e) {
+            Sentry.captureException(e, {
+                tags: {
+                    stage: 'loginToMinecraftWithXbox'
+                }
+            });
             throw new MSAError_1.MSAError('loginToMinecraftWithXbox', e);
         }
         const xboxLoginBody = xboxLoginResponse.data;
