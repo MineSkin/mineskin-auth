@@ -41,7 +41,7 @@ class MinecraftAuth {
             MinecraftAuth.logger.debug("checkGameOwnership");
             const entitlementsResponse = await this.requestHandlers.minecraftServices({
                 method: "GET",
-                url: "https://api.minecraftservices.com/entitlements/mcstore",
+                url: "https://api.minecraftservices.com/entitlements",
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
