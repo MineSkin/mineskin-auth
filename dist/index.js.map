@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"/","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;AAAA,kDAA+B;AAC/B,kDAA+B;AAC/B,6CAA0B;AAC1B,yCAAsB;AAEtB,yDAAsC","sourcesContent":["export * from \"./MicrosoftAuth\"\nexport * from \"./MinecraftAuth\"\nexport * from \"./MSAError\"\nexport * from \"./util\"\n\nexport * from \"./types/RequestHandler\""]}

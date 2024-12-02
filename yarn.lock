@@ -753,7 +753,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mineskin/auth@workspace:."
   dependencies:
-    "@mineskin/types": "git+ssh://git@github.com/MineSkin/mineskin-types.git"
+    "@mineskin/types": "git+ssh://git@github.com/MineSkin/mineskin-types.git#ts"
     "@sentry/node": "npm:^8.34.0"
     "@types/jest": "npm:^29.5.13"
     "@types/node": "npm:^20.14.9"
@@ -770,10 +770,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mineskin/types@git+ssh://git@github.com/MineSkin/mineskin-types.git":
+"@mineskin/types@git+ssh://git@github.com/MineSkin/mineskin-types.git#ts":
   version: 1.0.1
-  resolution: "@mineskin/types@git+ssh://git@github.com/MineSkin/mineskin-types.git#commit=7934efe89f9502a51cb74ebfc77cd652360fe0c2"
-  checksum: 10c0/de2846c4384d95e8c9dfb5a5e10aa66e172f8c6cd6923cb1662d8f2b1c2121532ddab1365c692a186833a3632125deda1140fe258ba2c2976ba77e8f33a232c1
+  resolution: "@mineskin/types@git+ssh://git@github.com/MineSkin/mineskin-types.git#commit=416b12b1d1a8c2b3a2a1ba7577d687f951748971"
+  checksum: 10c0/07482e58312fda7d20e9ae20b05e3b4ae701a8b096efe423d8847dcd1eb426c2968762a711e59a2a2cd3de187f90eb4a8dcbbfeefb27f280a6ec9eb7516a7b50
   languageName: node
   linkType: hard
 
@@ -4947,7 +4947,7 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A^5.5.3#optional!builtin<compat/typescript>":
   version: 5.6.3
-  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=379a07"
+  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=74658d"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
