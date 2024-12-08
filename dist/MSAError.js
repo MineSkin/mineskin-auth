@@ -8,6 +8,9 @@ class MSAError extends Error {
         this.stage = stage;
         this.cause = cause;
     }
+    get name() {
+        return 'MSAError';
+    }
 }
 exports.MSAError = MSAError;
 //# sourceMappingURL=MSAError.js.map
