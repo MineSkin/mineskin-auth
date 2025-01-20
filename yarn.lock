@@ -758,7 +758,7 @@ __metadata:
     "@types/jest": "npm:^29.5.13"
     "@types/node": "npm:^20.14.9"
     "@types/qs": "npm:^6"
-    "@xboxreplay/xboxlive-auth": "npm:^4.0.0"
+    "@xboxreplay/xboxlive-auth": "npm:^4.1.0"
     axios: "npm:^1.7.9"
     jest: "npm:^29.7.0"
     nodemon: "npm:^3.1.2"
@@ -1569,12 +1569,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xboxreplay/xboxlive-auth@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@xboxreplay/xboxlive-auth@npm:4.0.0"
+"@xboxreplay/xboxlive-auth@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@xboxreplay/xboxlive-auth@npm:4.1.0"
   dependencies:
-    axios: "npm:^0.21.1"
-  checksum: 10c0/4bce4b8a7b5273eef4bdd8c4ff00b09f283878db3a373526b3bdfd23edf72e90fe1e51ebf7fbfc57578338fc39a34275ace4b04b8bcb0eba169ee293e62a3fb9
+    axios: "npm:1.7.9"
+  checksum: 10c0/069bd62bd1ba23a1dd35cdbb71dab1d9ffb5a6b458470d39a5dd524c45cc228515feb3c81f2387dfe8548f487f85eb1283eec762b37ffa5c93b5bd0485d00eb4
   languageName: node
   linkType: hard
 
@@ -1744,16 +1744,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.21.1":
-  version: 0.21.4
-  resolution: "axios@npm:0.21.4"
-  dependencies:
-    follow-redirects: "npm:^1.14.0"
-  checksum: 10c0/fbcff55ec68f71f02d3773d467db2fcecdf04e749826c82c2427a232f9eba63242150a05f15af9ef15818352b814257541155de0281f8fb2b7e8a5b79f7f2142
-  languageName: node
-  linkType: hard
-
-"axios@npm:^1.7.9":
+"axios@npm:1.7.9, axios@npm:^1.7.9":
   version: 1.7.9
   resolution: "axios@npm:1.7.9"
   dependencies:
@@ -2540,7 +2531,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.15.6":
+"follow-redirects@npm:^1.15.6":
   version: 1.15.9
   resolution: "follow-redirects@npm:1.15.9"
   peerDependenciesMeta:
