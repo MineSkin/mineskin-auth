@@ -1,8 +1,8 @@
 import * as process from "node:process";
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import * as qs from "qs";
-import * as XboxLiveAuth from "@xboxreplay/xboxlive-auth"
-import { XBLExchangeTokensResponse } from "@xboxreplay/xboxlive-auth"
+import * as XboxLiveAuth from "@inventivetalent/xboxlive-auth"
+import { XBLExchangeTokensResponse, setAxiosInstance as setXBLAxiosInstance } from "@inventivetalent/xboxlive-auth"
 import {
     MicrosoftAuthInfo,
     MicrosoftIdentities, MicrosoftOauthResult,
@@ -10,7 +10,7 @@ import {
     XboxLoginResponse,
     XSTSResponse
 } from "@mineskin/types";
-import { RequestHandlers } from "./types/RequestHandler";
+import { RequestHandler, RequestHandlers } from "./types/RequestHandler";
 import { MSAError } from "./MSAError";
 import { epochSeconds, toEpochSeconds } from "./util";
 import winston from "winston";
@@ -28,6 +28,7 @@ export class MicrosoftAuth {
         private readonly requestHandlers: RequestHandlers<'generic' | 'liveLogin' | 'minecraftServices'>,
         private readonly redirectUri: string = process.env.MSA_REDIRECT_URI,
     ) {
+        setXBLAxiosInstance(this.requestHandlers.liveLogin as RequestHandler & AxiosInstance);
     }
 
     public async newOAuthRedirect(

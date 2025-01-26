@@ -1,4 +1,4 @@
-import { XBLExchangeTokensResponse } from "@xboxreplay/xboxlive-auth";
+import { XBLExchangeTokensResponse } from "@inventivetalent/xboxlive-auth";
 import { MicrosoftIdentities, XboxInfo, XSTSResponse } from "@mineskin/types";
 import { RequestHandlers } from "./types/RequestHandler";
 import winston from "winston";

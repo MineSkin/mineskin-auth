@@ -433,6 +433,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@inventivetalent/xboxlive-auth@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@inventivetalent/xboxlive-auth@npm:4.1.0"
+  dependencies:
+    axios: "npm:1.7.9"
+  checksum: 10c0/2baee3eb6cd989c0aea6334b0809b2fcad9498f5cd9ca9de507aa72a8a9b0e35cb854362a53c7aa3d7d3bf6f53252e3cb31aeb1999123dd4a4031b5f16aff161
+  languageName: node
+  linkType: hard
+
 "@isaacs/cliui@npm:^8.0.2":
   version: 8.0.2
   resolution: "@isaacs/cliui@npm:8.0.2"
@@ -753,12 +762,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mineskin/auth@workspace:."
   dependencies:
+    "@inventivetalent/xboxlive-auth": "npm:^4.1.0"
     "@mineskin/types": "git+ssh://git@github.com/MineSkin/mineskin-types.git"
     "@sentry/node": "npm:^8.34.0"
     "@types/jest": "npm:^29.5.13"
     "@types/node": "npm:^20.14.9"
     "@types/qs": "npm:^6"
-    "@xboxreplay/xboxlive-auth": "npm:^4.1.0"
     axios: "npm:^1.7.9"
     jest: "npm:^29.7.0"
     nodemon: "npm:^3.1.2"
@@ -1566,15 +1575,6 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "npm:*"
   checksum: 10c0/d16937d7ac30dff697801c3d6f235be2166df42e4a88bf730fa6dc09201de3727c0a9500c59a672122313341de5f24e45ee0ff579c08ce91928e519090b7906b
-  languageName: node
-  linkType: hard
-
-"@xboxreplay/xboxlive-auth@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "@xboxreplay/xboxlive-auth@npm:4.1.0"
-  dependencies:
-    axios: "npm:1.7.9"
-  checksum: 10c0/069bd62bd1ba23a1dd35cdbb71dab1d9ffb5a6b458470d39a5dd524c45cc228515feb3c81f2387dfe8548f487f85eb1283eec762b37ffa5c93b5bd0485d00eb4
   languageName: node
   linkType: hard
 

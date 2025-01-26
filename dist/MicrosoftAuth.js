@@ -29,7 +29,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MicrosoftAuth = void 0;
 const process = __importStar(require("node:process"));
 const qs = __importStar(require("qs"));
-const XboxLiveAuth = __importStar(require("@xboxreplay/xboxlive-auth"));
+const XboxLiveAuth = __importStar(require("@inventivetalent/xboxlive-auth"));
+const xboxlive_auth_1 = require("@inventivetalent/xboxlive-auth");
 const MSAError_1 = require("./MSAError");
 const util_1 = require("./util");
 const winston_1 = __importDefault(require("winston"));
@@ -41,6 +42,7 @@ class MicrosoftAuth {
     constructor(requestHandlers, redirectUri = process.env.MSA_REDIRECT_URI) {
         this.requestHandlers = requestHandlers;
         this.redirectUri = redirectUri;
+        (0, xboxlive_auth_1.setAxiosInstance)(this.requestHandlers.liveLogin);
     }
     async newOAuthRedirect(scopes, state, loginHint) {
         const scope = scopes.join("%20");
