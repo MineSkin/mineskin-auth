@@ -33,7 +33,7 @@ class MinecraftAuth {
     constructor(requestHandlers) {
         this.requestHandlers = requestHandlers;
     }
-    async checkGameOwnership(accessToken) {
+    async checkGameOwnership(accessToken, requestServer, breadcrumb) {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'checkGameOwnership'
@@ -45,14 +45,14 @@ class MinecraftAuth {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
-            });
+            }, requestServer, breadcrumb);
             const entitlementsBody = entitlementsResponse.data;
             // console.log("entitlements");
             // console.log(entitlementsBody)
             return entitlementsBody.hasOwnProperty("items") && entitlementsBody["items"].length > 0;
         });
     }
-    async getProfile(accessToken) {
+    async getProfile(accessToken, requestServer, breadcrumb) {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'getProfile'
@@ -63,7 +63,7 @@ class MinecraftAuth {
                 headers: {
                     "Authorization": `Bearer ${accessToken}`
                 }
-            });
+            }, requestServer, breadcrumb);
             return response.data;
         });
     }

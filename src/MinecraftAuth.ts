@@ -12,7 +12,7 @@ export class MinecraftAuth {
     ) {
     }
 
-    async checkGameOwnership(accessToken: string): Promise<boolean> {
+    async checkGameOwnership(accessToken: string, requestServer?: string, breadcrumb?: string): Promise<boolean> {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'checkGameOwnership'
@@ -24,7 +24,7 @@ export class MinecraftAuth {
                 headers: {
                     Authorization: `Bearer ${ accessToken }`
                 }
-            });
+            }, requestServer, breadcrumb);
             const entitlementsBody = entitlementsResponse.data;
             // console.log("entitlements");
             // console.log(entitlementsBody)
@@ -32,7 +32,7 @@ export class MinecraftAuth {
         });
     }
 
-    public async getProfile(accessToken: string): Promise<BasicMojangProfile> {
+    public async getProfile(accessToken: string, requestServer?: string, breadcrumb?: string): Promise<BasicMojangProfile> {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'getProfile'
@@ -43,7 +43,7 @@ export class MinecraftAuth {
                 headers: {
                     "Authorization": `Bearer ${ accessToken }`
                 }
-            });
+            }, requestServer, breadcrumb);
             return response.data;
         });
     }
