@@ -63,7 +63,7 @@ export class MicrosoftAuth {
         });
     }
 
-    async exchangeRpsTicketForIdentities(rpsTicket: string): Promise<MicrosoftIdentities & {
+    async exchangeRpsTicketForIdentities(rpsTicket: string, requestServer?: string, breadcrumb?: string): Promise<MicrosoftIdentities & {
         token: XBLExchangeTokensResponse
     }> {
         return await Sentry.startSpan({
@@ -95,13 +95,13 @@ export class MicrosoftAuth {
             // console.log(JSON.stringify(userTokenResponse))
             return {
                 token: userTokenResponse,
-                mc: await this.getIdentityForRelyingParty(userTokenResponse, MC_XSTSRelyingParty),
-                xbox: await this.getIdentityForRelyingParty(userTokenResponse, XBOX_XSTSRelyingParty)
+                mc: await this.getIdentityForRelyingParty(userTokenResponse, MC_XSTSRelyingParty, requestServer, breadcrumb),
+                xbox: await this.getIdentityForRelyingParty(userTokenResponse, XBOX_XSTSRelyingParty, requestServer, breadcrumb)
             };
         });
     }
 
-    async getIdentityForRelyingParty(userTokenResponse: XBLExchangeTokensResponse, relyingParty: string): Promise<XSTSResponse> {
+    async getIdentityForRelyingParty(userTokenResponse: XBLExchangeTokensResponse, relyingParty: string, requestServer?: string, breadcrumb?: string): Promise<XSTSResponse> {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'getIdentityForRelyingParty'
@@ -127,7 +127,7 @@ export class MicrosoftAuth {
                         /*"x-xbl-contract-version": 1*/
                     },
                     data: body
-                });
+                }, requestServer, breadcrumb);
             } catch (e) {
                 Sentry.captureException(e, {
                     tags: {
@@ -140,7 +140,7 @@ export class MicrosoftAuth {
         });
     }
 
-    private async authenticateXboxLiveWithFormData(form: any): Promise<XboxInfo> {
+    private async authenticateXboxLiveWithFormData(form: any, requestServer?: string, breadcrumb?: string): Promise<XboxInfo> {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'authenticateXboxLiveWithFormData'
@@ -156,7 +156,7 @@ export class MicrosoftAuth {
                         "Accept": "application/json"
                     },
                     data: qs.stringify(form)
-                });
+                }, requestServer, breadcrumb);
             } catch (e) {
                 Sentry.captureException(e, {
                     tags: {
@@ -182,7 +182,7 @@ export class MicrosoftAuth {
             const userHash = mcIdentity.DisplayClaims.xui[0].uhs;
             const XSTSToken = mcIdentity.Token;
 
-            const xboxLoginResponse = await this.loginToMinecraftWithXbox(userHash, XSTSToken);
+            const xboxLoginResponse = await this.loginToMinecraftWithXbox(userHash, XSTSToken, requestServer, breadcrumb);
             const minecraftXboxUsername = xboxLoginResponse.username;
 
             return {
@@ -221,7 +221,7 @@ export class MicrosoftAuth {
         });
     }
 
-    private async loginToMinecraftWithXbox(userHash: string, xstsToken: string): Promise<XboxLoginResponse> {
+    private async loginToMinecraftWithXbox(userHash: string, xstsToken: string, requestServer?: string, breadcrumb?: string): Promise<XboxLoginResponse> {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'loginToMinecraftWithXbox'
@@ -240,7 +240,7 @@ export class MicrosoftAuth {
                         "Accept": "application/json"
                     },
                     data: body
-                });
+                }, requestServer, breadcrumb);
             } catch (e) {
                 Sentry.captureException(e, {
                     tags: {
@@ -257,7 +257,7 @@ export class MicrosoftAuth {
     }
 
 
-    async refreshXboxAccessToken(xboxRefreshToken: string): Promise<XboxInfo> {
+    async refreshXboxAccessToken(xboxRefreshToken: string, requestServer?: string, breadcrumb?: string): Promise<XboxInfo> {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'refreshXboxAccessToken'
@@ -270,7 +270,7 @@ export class MicrosoftAuth {
                 "grant_type": "refresh_token",
                 "redirect_uri": this.redirectUri
             }
-            return await this.authenticateXboxLiveWithFormData(form);
+            return await this.authenticateXboxLiveWithFormData(form, requestServer, breadcrumb);
         });
     }
 

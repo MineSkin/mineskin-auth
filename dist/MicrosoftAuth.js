@@ -69,7 +69,7 @@ class MicrosoftAuth {
             return await this.authenticateXboxLiveWithFormData(form);
         });
     }
-    async exchangeRpsTicketForIdentities(rpsTicket) {
+    async exchangeRpsTicketForIdentities(rpsTicket, requestServer, breadcrumb) {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'exchangeRpsTicketForIdentities'
@@ -100,12 +100,12 @@ class MicrosoftAuth {
             // console.log(JSON.stringify(userTokenResponse))
             return {
                 token: userTokenResponse,
-                mc: await this.getIdentityForRelyingParty(userTokenResponse, MC_XSTSRelyingParty),
-                xbox: await this.getIdentityForRelyingParty(userTokenResponse, XBOX_XSTSRelyingParty)
+                mc: await this.getIdentityForRelyingParty(userTokenResponse, MC_XSTSRelyingParty, requestServer, breadcrumb),
+                xbox: await this.getIdentityForRelyingParty(userTokenResponse, XBOX_XSTSRelyingParty, requestServer, breadcrumb)
             };
         });
     }
-    async getIdentityForRelyingParty(userTokenResponse, relyingParty) {
+    async getIdentityForRelyingParty(userTokenResponse, relyingParty, requestServer, breadcrumb) {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'getIdentityForRelyingParty'
@@ -131,7 +131,7 @@ class MicrosoftAuth {
                         /*"x-xbl-contract-version": 1*/
                     },
                     data: body
-                });
+                }, requestServer, breadcrumb);
             }
             catch (e) {
                 Sentry.captureException(e, {
@@ -144,7 +144,7 @@ class MicrosoftAuth {
             return authResponse.data;
         });
     }
-    async authenticateXboxLiveWithFormData(form) {
+    async authenticateXboxLiveWithFormData(form, requestServer, breadcrumb) {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'authenticateXboxLiveWithFormData'
@@ -160,7 +160,7 @@ class MicrosoftAuth {
                         "Accept": "application/json"
                     },
                     data: qs.stringify(form)
-                });
+                }, requestServer, breadcrumb);
             }
             catch (e) {
                 Sentry.captureException(e, {
@@ -183,7 +183,7 @@ class MicrosoftAuth {
             const xboxIdentity = identityResponses.xbox;
             const userHash = mcIdentity.DisplayClaims.xui[0].uhs;
             const XSTSToken = mcIdentity.Token;
-            const xboxLoginResponse = await this.loginToMinecraftWithXbox(userHash, XSTSToken);
+            const xboxLoginResponse = await this.loginToMinecraftWithXbox(userHash, XSTSToken, requestServer, breadcrumb);
             const minecraftXboxUsername = xboxLoginResponse.username;
             return {
                 // Minecraft accessToken - does not return a refresh token, so need the MS one above
@@ -220,7 +220,7 @@ class MicrosoftAuth {
             };
         });
     }
-    async loginToMinecraftWithXbox(userHash, xstsToken) {
+    async loginToMinecraftWithXbox(userHash, xstsToken, requestServer, breadcrumb) {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'loginToMinecraftWithXbox'
@@ -239,7 +239,7 @@ class MicrosoftAuth {
                         "Accept": "application/json"
                     },
                     data: body
-                });
+                }, requestServer, breadcrumb);
             }
             catch (e) {
                 Sentry.captureException(e, {
@@ -255,7 +255,7 @@ class MicrosoftAuth {
             return xboxLoginBody;
         });
     }
-    async refreshXboxAccessToken(xboxRefreshToken) {
+    async refreshXboxAccessToken(xboxRefreshToken, requestServer, breadcrumb) {
         return await Sentry.startSpan({
             op: 'auth',
             name: 'refreshXboxAccessToken'
@@ -268,7 +268,7 @@ class MicrosoftAuth {
                 "grant_type": "refresh_token",
                 "redirect_uri": this.redirectUri
             };
-            return await this.authenticateXboxLiveWithFormData(form);
+            return await this.authenticateXboxLiveWithFormData(form, requestServer, breadcrumb);
         });
     }
 }

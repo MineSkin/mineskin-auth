@@ -9,11 +9,11 @@ export declare class MicrosoftAuth {
     constructor(requestHandlers: RequestHandlers<'generic' | 'liveLogin' | 'minecraftServices'>, redirectUri?: string);
     newOAuthRedirect(scopes: string[], state: string, loginHint: string): Promise<string>;
     loginWithXboxCode(code: string): Promise<XboxInfo>;
-    exchangeRpsTicketForIdentities(rpsTicket: string): Promise<MicrosoftIdentities & {
+    exchangeRpsTicketForIdentities(rpsTicket: string, requestServer?: string, breadcrumb?: string): Promise<MicrosoftIdentities & {
         token: XBLExchangeTokensResponse;
     }>;
-    getIdentityForRelyingParty(userTokenResponse: XBLExchangeTokensResponse, relyingParty: string): Promise<XSTSResponse>;
+    getIdentityForRelyingParty(userTokenResponse: XBLExchangeTokensResponse, relyingParty: string, requestServer?: string, breadcrumb?: string): Promise<XSTSResponse>;
     private authenticateXboxLiveWithFormData;
     private loginToMinecraftWithXbox;
-    refreshXboxAccessToken(xboxRefreshToken: string): Promise<XboxInfo>;
+    refreshXboxAccessToken(xboxRefreshToken: string, requestServer?: string, breadcrumb?: string): Promise<XboxInfo>;
 }
