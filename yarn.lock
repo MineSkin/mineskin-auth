@@ -768,7 +768,7 @@ __metadata:
     "@types/jest": "npm:^29.5.13"
     "@types/node": "npm:^20.14.9"
     "@types/qs": "npm:^6"
-    axios: "npm:^1.7.9"
+    axios: "npm:^1.9.0"
     jest: "npm:^29.7.0"
     nodemon: "npm:^3.1.2"
     qs: "npm:^6.12.3"
@@ -781,8 +781,8 @@ __metadata:
 
 "@mineskin/types@git+ssh://git@github.com/MineSkin/mineskin-types.git":
   version: 1.0.1
-  resolution: "@mineskin/types@git+ssh://git@github.com/MineSkin/mineskin-types.git#commit=26c68c4a2a6338a2e2696485e425159de3ab396e"
-  checksum: 10c0/1f7e22db2049a58d050146f931d415b0088e7b1bdf3a3c4d22d4963dad42a907f5aadb70cf969c0b68c5c9c52fdd74dbeef919b5c42456404059185dca92a6f3
+  resolution: "@mineskin/types@git+ssh://git@github.com/MineSkin/mineskin-types.git#commit=3272ad694bf8d8318b519db42f6ace8b8f0c3cb4"
+  checksum: 10c0/f2aeed7b2c9c1bb6cc436812160a8187715ae2fad26fe22ecf1bd4da208e0bf01aa8606f76d7a4cc4e62e90de3a68d207aabf03bb737e3d4c6e7e03e59d8233e
   languageName: node
   linkType: hard
 
@@ -1744,7 +1744,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.7.9, axios@npm:^1.7.9":
+"axios@npm:1.7.9":
   version: 1.7.9
   resolution: "axios@npm:1.7.9"
   dependencies:
@@ -1752,6 +1752,17 @@ __metadata:
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
   checksum: 10c0/b7a41e24b59fee5f0f26c1fc844b45b17442832eb3a0fb42dd4f1430eb4abc571fe168e67913e8a1d91c993232bd1d1ab03e20e4d1fee8c6147649b576fc1b0b
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "axios@npm:1.9.0"
+  dependencies:
+    follow-redirects: "npm:^1.15.6"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10c0/9371a56886c2e43e4ff5647b5c2c3c046ed0a3d13482ef1d0135b994a628c41fbad459796f101c655e62f0c161d03883454474d2e435b2e021b1924d9f24994c
   languageName: node
   linkType: hard
 
