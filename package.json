@@ -30,7 +30,7 @@
   },
   "packageManager": "yarn@4.3.1",
   "dependencies": {
-    "@inventivetalent/xboxlive-auth": "^4.1.0",
+    "@inventivetalent/xboxlive-auth": "^4.1.1",
     "@sentry/node": "^9.29.0",
     "axios": "^1.12.2",
     "qs": "^6.14.0",
