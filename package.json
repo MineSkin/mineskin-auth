@@ -32,8 +32,8 @@
   "dependencies": {
     "@inventivetalent/xboxlive-auth": "^4.1.0",
     "@sentry/node": "^9.29.0",
-    "axios": "^1.9.0",
-    "qs": "^6.12.3",
-    "winston": "^3.14.2"
+    "axios": "^1.12.2",
+    "qs": "^6.14.0",
+    "winston": "^3.17.0"
   }
 }
